@@ -1,18 +1,25 @@
 package proj.repository;
 
 import proj.entity.Article;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleRepository {
     private List<Article> articles;
     private int lastId;
-    private final String FILE_PATH = "data/article.txt";
+    private final String FILE_PATH = "data/article.json";
+    private Gson gson;
 
     public ArticleRepository() {
         this.articles = new ArrayList<>();
         this.lastId = 0;
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         loadFromFile();
     }
 
@@ -21,7 +28,6 @@ public class ArticleRepository {
         lastId++;
         article.setId(lastId);
         articles.add(article);
-
         saveToFile();
     }
 
@@ -32,13 +38,8 @@ public class ArticleRepository {
 
     // 파일에 저장하는 내부 로직
     private void saveToFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            // 예: "1||자바공부||재밌다||2026-02-06" 형태로 저장
-            for (Article a : articles) {
-                String line = a.getId() + "||" + a.getTitle() + "||" + a.getContent() + "||" + a.getRegDate();
-                bw.write(line);
-                bw.newLine();
-            }
+        try (FileWriter fw = new FileWriter(FILE_PATH)) {
+            gson.toJson(articles, fw);
         } catch (IOException e) {
             System.out.println("파일 저장 중 오류가 발생했습니다.");
         }
@@ -49,16 +50,16 @@ public class ArticleRepository {
         File file = new File(FILE_PATH);
         if (!file.exists()) return;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split("\\|\\|");
-                if (parts.length == 4) {
-                    int id = Integer.parseInt(parts[0]);
-                    Article article = new Article(id, parts[1], parts[2], parts[3]);
-                    articles.add(article);
-                    lastId = Math.max(lastId, id);
-                }
+        try (FileReader fr = new FileReader(file)) {
+            Type listType = new TypeToken<ArrayList<Article>>(){}.getType();
+            articles = gson.fromJson(fr, listType);
+
+            if (articles == null) {
+                articles = new ArrayList<>();
+            }
+
+            for (Article a : articles) {
+                lastId = Math.max(lastId, a.getId());
             }
         } catch (IOException e) {
             System.out.println("파일 읽기 중 오류가 발생했습니다.");
