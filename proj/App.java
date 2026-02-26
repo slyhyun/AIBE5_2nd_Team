@@ -36,8 +36,7 @@ public class App {
                 System.out.println("update 컨트롤러 호출 예정");
             }
             else if (cmd.equals("delete")) {
-                // new ArticleDeleteController().execute(sc, articleRepository);
-                System.out.println("delete 컨트롤러 호출 예정");
+                new ArticleDeleteController().execute(sc, articleRepository);
             }
             else {
                 System.out.println("존재하지 않는 명령어입니다.");

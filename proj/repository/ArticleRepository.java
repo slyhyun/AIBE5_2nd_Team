@@ -37,6 +37,11 @@ public class ArticleRepository {
         return articles;
     }
 
+    // 게시글 삭제
+    public void delete(int id) {
+        articles.removeIf(a -> a.getId() == id);
+        saveToFile();
+    }
     // 파일에 저장하는 내부 로직
     private void saveToFile() {
         try (FileWriter fw = new FileWriter(FILE_PATH, StandardCharsets.UTF_8)) {
