@@ -54,6 +54,12 @@ public class ArticleRepository {
 
     // 파일에 저장하는 내부 로직
     private void saveToFile() {
+        try{
+            File file =new File(FILE_PATH.substring(0,FILE_PATH.lastIndexOf("/")));
+            if(!file.isDirectory())file.mkdirs();
+        }catch (Exception e){
+            System.out.println("폴더 만들기 실패");
+        }
         try (FileWriter fw = new FileWriter(FILE_PATH, StandardCharsets.UTF_8)) {
             gson.toJson(articles, fw);
         } catch (IOException e) {
