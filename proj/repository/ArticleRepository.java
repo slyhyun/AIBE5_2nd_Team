@@ -52,6 +52,12 @@ public class ArticleRepository {
         saveToFile();
     }
 
+    // 게시글 삭제 후 파일 덮어쓰기
+    public void delete(Article article) {
+        articles.remove(article);
+        update();
+    }
+
     // 파일에 저장하는 내부 로직
     private void saveToFile() {
         try{
