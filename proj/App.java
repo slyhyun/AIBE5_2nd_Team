@@ -2,6 +2,7 @@ package proj;
 
 import proj.repository.ArticleRepository;
 import proj.controller.*;
+import proj.util.Rq;
 import java.util.Scanner;
 
 public class App {
@@ -15,28 +16,35 @@ public class App {
             System.out.print("명령어: ");
             String cmd = sc.nextLine().trim();
 
-            if (cmd.equals("exit")) {
+            Rq rq = new Rq(cmd);
+
+            if (rq.getAction().equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");
                 break;
             }
-            else if (cmd.equals("write")) {
+            else if (rq.getAction().equals("write")) {
                 // new ArticleWriteController().execute(sc, articleRepository);
                 System.out.println("write 컨트롤러 호출 예정");
             }
-            else if (cmd.equals("list")) {
-                // new ArticleListController().execute(sc, articleRepository);
-                System.out.println("list 컨트롤러 호출 예정");
+            else if (rq.getAction().equals("list")) {
+                new ArticleListController().execute(sc, articleRepository);
+                
             }
-            else if (cmd.equals("detail")) {
+            else if (rq.getAction().equals("detail")) {
                 // new ArticleDetailController().execute(sc, articleRepository);
                 System.out.println("detail 컨트롤러 호출 예정");
             }
-            else if (cmd.equals("update")) {
-                // new ArticleUpdateController().execute(sc, articleRepository);
-                System.out.println("update 컨트롤러 호출 예정");
+            else if (rq.getAction().equals("update")) {
+                new ArticleUpdateController().execute(sc, articleRepository, rq);
             }
+<<<<<<< HEAD
             else if (cmd.equals("delete")) {
                 new ArticleDeleteController().execute(sc, articleRepository);
+=======
+            else if (rq.getAction().equals("delete")) {
+                // new ArticleDeleteController().execute(sc, articleRepository);
+                System.out.println("delete 컨트롤러 호출 예정");
+>>>>>>> df6ae0c706469fd424c51eeefad5154ec76424ce
             }
             else {
                 System.out.println("존재하지 않는 명령어입니다.");

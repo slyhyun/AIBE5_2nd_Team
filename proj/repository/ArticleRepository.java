@@ -37,13 +37,37 @@ public class ArticleRepository {
         return articles;
     }
 
+<<<<<<< HEAD
     // 게시글 삭제
     public void delete(int id) {
         articles.removeIf(a -> a.getId() == id);
         saveToFile();
     }
+=======
+    // ID로 게시글 찾기
+    public Article findById(int id) {
+        for (Article article : articles) {
+            if (article.getId() == id) {
+                return article;
+            }
+        }
+        return null;
+    }
+
+    // 수정 후 저장
+    public void update() {
+        saveToFile();
+    }
+
+>>>>>>> df6ae0c706469fd424c51eeefad5154ec76424ce
     // 파일에 저장하는 내부 로직
     private void saveToFile() {
+        try{
+            File file =new File(FILE_PATH.substring(0,FILE_PATH.lastIndexOf("/")));
+            if(!file.isDirectory())file.mkdirs();
+        }catch (Exception e){
+            System.out.println("폴더 만들기 실패");
+        }
         try (FileWriter fw = new FileWriter(FILE_PATH, StandardCharsets.UTF_8)) {
             gson.toJson(articles, fw);
         } catch (IOException e) {
