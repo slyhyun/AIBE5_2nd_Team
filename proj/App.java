@@ -27,8 +27,7 @@ public class App {
             } else if (rq.getAction().equals("list")) {
                 new ArticleListController().execute(sc, articleRepository);
             } else if (rq.getAction().equals("detail")) {
-                // new ArticleDetailController().execute(sc, articleRepository);
-                System.out.println("detail 컨트롤러 호출 예정");
+                new ArticleDetailController().execute(sc, articleRepository, rq);
             } else if (rq.getAction().equals("update")) {
                 new ArticleUpdateController().execute(sc, articleRepository, rq);
             } else if (rq.getAction().equals("delete")) {
